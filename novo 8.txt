@@ -1,0 +1,66 @@
+Criar classe pública com 4 campos Produto
+-int ID
+-string Nome
+-int CategoriaID
+-virtual Categoria Categoria
+
+Crias classe pública 3 campos Categoria
+-int ID
+-int Nome
+-virtual ObservableCollectionListSource<P.> Produto = new()
+
+Criar classe pública ProdutoContexto
+Herda :DbContext
+- DbSet<P.> Produtos
+- DbSet<C.> Categorias
+
+Criar metodo
+protec. overr. void OnConfiguring(...)
+-optionsBuilder.UseSqlite("Data Source=produtos.db")
+
+protec. overr. void OnModelCreat(...)
+-modelBuilder.Entity<.>().HasData(
+	new...
+)x2
+
+RODAR CÓDIGO
+
+Criar 2 dataGridView
+Criar 2 botão
+
+na setinha em cima dos DGV importar as Classes
+
+no MainForm:
+-ProdutoContexto? dbC.
+
+-protec. overr void OnLoad(e){
+	base.OnLoad(e)
+	dbC = new...
+	dbC.Database.EnsCre()
+	dbC.Cate.Load()
+	categoriaBindingSource.DataSource = dbC.Cate.Local.ToBindingList()	
+}
+
+-protec. overr void OnClosing(e){
+	base.OnClosing(e)
+	dbC?.Dispode();
+	dbC = null;
+}
+
+No SelectionChanged de dgvCategorias
+-Se dbC for diferente de nulo
+	var categoria = (Categoria) dgvCategoria.CurrentRow.DataBoundItem;
+	
+-Se categoria não for nulo
+	dbC.Entry(categoria).Collection(e => e.Produto).Load();
+
+No clique de Salvar
+-dbC!.SaveChanges
+-dgvC.Refresh()
+-dgvP.Refresh()
+
+No clique Excluir
+-Se dbC for diferente de nulo
+	var categoria = (Categoria) linha do dgv
+-Se categoria não for nulo
+	dbC.Remove(categoria)
